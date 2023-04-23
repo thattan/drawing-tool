@@ -1,0 +1,8 @@
+{
+  "name": "drawing-tool",
+  "template": "Default",
+  "isConfigured": {
+    "client": true,
+    "server": true
+  }
+}
