@@ -22,6 +22,16 @@ export default new Router({
       path: "/new-page",
       name: "newpage",
       component: () => import("./views/NewPage.vue")
+    },
+    {
+      path: "/drawing",
+      name: "drawing",
+      component: () => import("./views/Drawing.vue")
+    },
+    {
+      path: "/tester",
+      name: "tester",
+      component: () => import("./views/Tester.vue")
     }
   ]
 });
