@@ -1,0 +1,5 @@
+- Add typescript, use 'vue add typescript'
+- convert files to ts
+- add google map functionality
+- finish drag and drop of images, use http://jsfiddle.net/Ahammadalipk/w8kkc/185/
+- 

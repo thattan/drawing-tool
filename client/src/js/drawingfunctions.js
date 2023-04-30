@@ -1,4 +1,4 @@
-import { fabric } from "fabric";
+import { fabric } from "../../node_modules/fabric";
 
 fabric.Canvas.prototype.getItemByName = function (name) {
   var object = null,

@@ -1,11 +1,11 @@
 const imageList = [
     {
         name: 'Tree',
-        src: require('../assets/Tree.png')
+        src: require('../../assets/Tree.png')
     },
     {
         name: 'Shrub',
-        src: require('../assets/Shrub.png')
+        src: require('../../assets/Shrub.png')
     }
 ]
 
