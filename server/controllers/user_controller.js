@@ -3,8 +3,7 @@
 const User = require('../models/user_schema');
 const Drawing = require('../models/drawing_schema');
 
-const createData = (req, res) => {
-  debugger;
+exports.createData = (req, res) => {
   console.log('hit');
 
   const user = new User(req.body);
@@ -35,8 +34,7 @@ const createData = (req, res) => {
     });
 };
 
-const readData = (req, res) => {
-    debugger;
+exports.readData = (req, res) => {
   console.log('hit');
   User.find()
     .then((data) => {
@@ -50,7 +48,7 @@ const readData = (req, res) => {
     });
 };
 
-const updateData = (req, res) => {
+exports.updateData = (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, {
     useFindAndModify: false,
     new: true,
@@ -70,7 +68,7 @@ const updateData = (req, res) => {
     });
 };
 
-const deleteData = (req, res) => {
+exports.deleteData = (req, res) => {
   User.findById(req.params.id)
     .then((data) => {
       if (!data) {
@@ -86,11 +84,4 @@ const deleteData = (req, res) => {
       console.error(err);
       res.status(500).json(err);
     });
-};
-
-module.exports = {
-  createData,
-  readData,
-  updateData,
-  deleteData,
 };

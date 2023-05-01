@@ -10,6 +10,7 @@
     </div>
     <div class="float-right">
       <button id="homeBtn" @click="homeClick()">Home</button>
+      <button id="homeBtn" @click="saveDrawing()">Save</button>
       <button id="finalizeBtn" @click="finalize()">Export</button>
     </div>
   </div>
@@ -906,10 +907,12 @@ export default {
         //that.canvas.saveState();
       });
     },
+
     freeDraw() {
       this.canvas.isDrawingMode = true;
       this.canvas.freeDrawingBrush.width = 5;
     },
+
     async finalize() {
       // const response = await axios.post(`http://localhost:9000/api`, {
       //   name: 'test',
@@ -928,6 +931,13 @@ export default {
       aTag.href = URL.createObjectURL(blob);
       aTag.download = 'drawing.png';
       aTag.click();
+    },
+    
+    async saveDrawing() {
+            // const response = await axios.post(`http://localhost:9000/api`, {
+      //   name: 'test',
+      //   password: 'dispass'
+      // });
     }
   }
 }
