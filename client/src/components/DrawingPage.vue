@@ -134,31 +134,27 @@
     </div>
 
     <div id="right-sidebar">
-      <!-- <div class="library">
-          <div id="right-sidebar-header">PLAYGROUND LIBRARIES</div>
-        </div> -->
-
       <div class="library" data-dropdown="landscape">
         <div id="right-sidebar-header">Add To Drawing</div>
         <img :src="require('../../assets/arrow_drop_down.svg')" width="24" height="24">
       </div>
       <div class="library-items-container" id="landscape-items">
+        <div class="library-item">
+          <input type="file" id="imgupload" style="display:none" @change="uploadFile"/> 
+          <div class="float-right library-item-text" @click="openUpload()">Upload</div>
+        </div>
         <div class="library-item" v-for="item in imageList" @click="addImage(item.name)">
           <img class="float-left" :src="item.src" width="45" height="45" @dragstart="dragStartImage()">
           <div class="float-right library-item-text">{{ item.name }}</div>
         </div>
       </div>
     </div>
-    <!-- <div data-tg-tour="<span>My first tour</span>"> ... </div> -->
-
   </div>
 </template>
   
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
 import drawingFunctions from '.././js/drawingfunctions.js';
 import type from '.././js/types.js';
-//import grid from './js/grid.js';
 import { fabric } from "fabric";
 import imageList from '.././js/images.js';
 import axios from "axios";
@@ -938,6 +934,43 @@ export default {
       //   name: 'test',
       //   password: 'dispass'
       // });
+    },
+
+    openUpload() {
+      document.getElementById('imgupload').click();
+    },
+
+    async uploadFile(e) {
+      console.log(e);
+      const file = e.target.files[0];
+
+      try {
+        const dataURI = await this.fileToDataURI(file);
+
+        this.imageList.push({
+          name: file.name,
+          src: dataURI
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    fileToDataURI(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const dataURI = reader.result;
+          resolve(dataURI);
+        };
+
+        reader.onerror = error => {
+          reject(error);
+        };
+
+        reader.readAsDataURL(file);
+      });
     }
   }
 }

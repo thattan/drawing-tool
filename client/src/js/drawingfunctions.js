@@ -312,7 +312,7 @@ var drawingFunctions = {
   finalize(_canvas) {
     //remove background grid image
     // _canvas.backgroundImage = 0;
-    // _canvas.backgroundColor = '#FFFFFF';
+    _canvas.backgroundColor = '#FFFFFF';
 
     // var previousLegend = _canvas.getItemByName('legend');
     // if (previousLegend != undefined) {
