@@ -18,21 +18,20 @@ let s3 = new AWS.S3({
 
 
 exports.createData = (req, res) => {
-    console.log('hit s3 upload', req.file)
-
-    if (!req.body || !req.body.file) {
+    if (!req.files[0]) {
         return res.status(400).send('No file provided');
     }
 
-    console.log('file', req.body.file);
+    const file = req.files[0];
 
-    const base64Data = req.body.file.replace(/^data:image\/png;base64,/, '');
-
-    s3.putObject({
+    const params = {
         Bucket: 'drawing-tool-dev',
-        Key: 'test-file2.txt',
-        Body: Buffer('this is a test text file')
-    }, (error, success) => {
+        Key: file.originalname,
+        Body: file.buffer,
+        ContentType: file.mimetype
+      };
+
+    s3.putObject(params, (error, success) => {
         if (error) {
             console.log(error)
         }

@@ -2,6 +2,7 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 // parse env variables
 require('dotenv').config();
@@ -15,6 +16,8 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+const upload = multer();
 
 // Configure middlewares
 app.use(cors());
