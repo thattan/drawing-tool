@@ -1,6 +1,7 @@
 // Importing required modules
 const cors = require('cors');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 // parse env variables
 require('dotenv').config();
@@ -11,6 +12,9 @@ require("./helpers/db/mongodb.js")();
 const port = process.env.PORT || 9000;
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Configure middlewares
 app.use(cors());

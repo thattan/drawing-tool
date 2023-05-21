@@ -140,7 +140,7 @@
       </div>
       <div class="library-items-container" id="landscape-items">
         <div class="library-item">
-          <input type="file" id="imgupload" style="display:none" @change="uploadFile"/> 
+          <input type="file" id="imgupload" style="display:none" @change="uploadFile" />
           <div class="float-right library-item-text" @click="openUpload()">Upload</div>
         </div>
         <div class="library-item" v-for="item in imageList" @click="addImage(item.name)">
@@ -234,9 +234,9 @@ export default {
     const that = this;
 
     fabric.Image.fromURL(require('../../assets/grid.png'), function (Image) {
-        that.canvas.setBackgroundImage(Image);
-        that.canvas.renderAll();
-      })
+      that.canvas.setBackgroundImage(Image);
+      that.canvas.renderAll();
+    })
 
     // fetch("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/82.png")
     //   .then(result => result.blob())
@@ -885,21 +885,29 @@ export default {
 
     addImage(name) {
       const image = imageList.find(x => x.name === name);
+      this.canvas.selection = true;
+      this.canvas.set("selection", true);
 
       this.inDrawingMode = type.drawingMode.NONE;
 
       const that = this;
 
       fabric.Image.fromURL(image.src, function (oImg) {
-          oImg.set({
-            left: (200),
-            top: (100),
-            readOut: {
-              imagetype: image.name
-            }
-          });
+        oImg.set({
+          left: (200),
+          top: (100),
+          readOut: {
+            imagetype: image.name
+          },
+          selectable: true, // Make the image selectable
+          resizable: true, // Enable resizing   
+          lockRotation: false, // Allow rotation
+          lockScaling: false
+        });
 
         that.canvas.add(oImg);
+        that.canvas.setActiveObject(oImg); // Set the image object as active
+
         //that.canvas.saveState();
       });
     },
@@ -928,9 +936,9 @@ export default {
       aTag.download = 'drawing.png';
       aTag.click();
     },
-    
+
     async saveDrawing() {
-            // const response = await axios.post(`http://localhost:9000/api`, {
+      // const response = await axios.post(`http://localhost:9000/api`, {
       //   name: 'test',
       //   password: 'dispass'
       // });
@@ -946,11 +954,29 @@ export default {
 
       try {
         const dataURI = await this.fileToDataURI(file);
-
+        console.log(dataURI);
         this.imageList.push({
           name: file.name,
           src: dataURI
+        });
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        await axios.post('http://localhost:9000/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
+          .then((response) => {
+            console.log('File uploaded successfully');
+            // Handle the response
+          })
+          .catch((error) => {
+            console.error('Failed to upload file:', error);
+            // Handle the error
+          });
+
       } catch (error) {
         console.error(error);
       }

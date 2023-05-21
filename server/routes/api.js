@@ -2,6 +2,7 @@ const express = require('express');
 
 const user_controller = require('../controllers/user_controller');
 const drawing_controller = require('../controllers/drawing_controller');
+const upload_controller = require('../controllers/upload_controller');
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router
   .post('/', drawing_controller.createData)
   .get('/', drawing_controller.readData)
   .put('/:id', drawing_controller.updateData)
-  .delete('/:id', drawing_controller.deleteData);
+  .delete('/:id', drawing_controller.deleteData)
+  .post('/upload', upload_controller.createData)
 
 module.exports = router;
