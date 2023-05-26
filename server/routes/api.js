@@ -6,7 +6,6 @@ const user_controller = require('../controllers/user_controller');
 const drawing_controller = require('../controllers/drawing_controller');
 const upload_controller = require('../controllers/upload_controller');
 
-// Configure multer middleware
 const upload = multer();
 
 const router = express.Router();

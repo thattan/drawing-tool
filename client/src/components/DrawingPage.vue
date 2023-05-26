@@ -906,8 +906,8 @@ export default {
         });
 
         that.canvas.add(oImg);
+        that.allowRotateAndResize();
         that.canvas.setActiveObject(oImg); // Set the image object as active
-
         //that.canvas.saveState();
       });
     },
@@ -918,13 +918,6 @@ export default {
     },
 
     async finalize() {
-      // const response = await axios.post(`http://localhost:9000/api`, {
-      //   name: 'test',
-      //   password: 'dispass'
-      // });
-
-      // console.log(response);
-
       this.inDrawingMode = type.NONE;
       //const rawData = _canvas.toDatalessJSON();
 
@@ -997,6 +990,17 @@ export default {
 
         reader.readAsDataURL(file);
       });
+    },
+
+    allowRotateAndResize() {
+      // for some reason the default resize and rotate are not selectable unless I select all
+      this.canvas.discardActiveObject();
+      var sel = new fabric.ActiveSelection(this.canvas.getObjects(), {
+        canvas: this.canvas,
+      });
+      this.canvas.setActiveObject(sel);
+      this.canvas.requestRenderAll();
+      this.canvas.discardActiveObject();
     }
   }
 }
