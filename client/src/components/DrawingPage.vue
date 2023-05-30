@@ -62,7 +62,7 @@
       <div id="toolbar">
         <div class="tool" data-tg-tour='The final step<br> <img src="b6e5ff47724ef4eb6a69.svg" height="500" width="500">'
           data-tg-order="99">
-          <div class="tool-item" id="pan" @click="panMode($event)">
+          <div class="tool-item" :class="{ 'selected-tool': inDrawingMode === 'pan' }" id="pan" @click="panMode($event)">
             <img :src="require('../../assets/pan.svg')" width="24" height="24">
             <div>Pan</div>
           </div>
@@ -112,12 +112,12 @@
             <div>Compass</div>
           </div>
         </div>
-        <div class="tool">
+        <!-- <div class="tool">
           <div class="tool-item" id="callout">
             <img :src="require('../../assets/callout.svg')" width="24" height="24">
             <div>Callout</div>
           </div>
-        </div>
+        </div> -->
         <div class="tool">
           <div class="tool-item" id="undo">
             <img :src="require('../../assets/undo.svg')" width="24" height="24">
@@ -144,7 +144,7 @@
           <div class="float-right library-item-text" @click="openUpload()">Upload</div>
         </div>
         <div class="library-item" v-for="item in imageList" @click="addImage(item.name)">
-          <img class="float-left" :src="item.src" width="45" height="45" @dragstart="dragStartImage()">
+          <img class="float-left" :src="item.src" width="45" height="45" @dragstart="dragStartImage(item)">
           <div class="float-right library-item-text">{{ item.name }}</div>
         </div>
       </div>
@@ -201,7 +201,7 @@ export default {
 
       currentLineTextbox: null,
 
-      currentImageDrag: require('../../assets/TreeThumbnail.png')
+      currentDragImg: null
     }
   },
 
@@ -836,6 +836,8 @@ export default {
       //e.dataTransfer.dropEffect = 'copy'; // See the section on the DataTransfer object.
       // NOTE: comment above refers to the article (see top) -natchiketa
 
+      // console.log('dragenter', e);
+
       return false;
     },
 
@@ -847,27 +849,32 @@ export default {
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
       }
+      
+      const x = e.e.layerX;
+      const y = e.e.layerY;
+      const that = this;
 
-      var img = document.querySelector('#treepng');
+      fabric.Image.fromURL(this.currentDragImg.src, function (oImg) {
+        oImg.set({
+          left: x,
+          top: y,
+          readOut: {
+            imagetype: that.currentDragImg.name
+          }
+        });
 
-      console.log('event: ', e);
-
-      var newImage = new fabric.Image(img, {
-        width: img.width,
-        height: img.height,
-        // Set the center of the new object based on the event coordinates relative
-        // to the canvas container.
-        left: 0,
-        top: 0
+        that.canvas.add(oImg);
+        that.allowRotateAndResize();
+        that.canvas.setActiveObject(oImg);
       });
 
-      this.canvas.add(newImage);
+      this.inDrawingMode = type.drawingMode.NONE;
 
       return false;
     },
 
-    dragStartImage() {
-      //this.currentImageDrag
+    dragStartImage(img) {
+      this.currentDragImg = img;
     },
 
     homeClick() {
